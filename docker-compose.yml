@@ -7,8 +7,6 @@ services:
     #  - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD
-    # Reduce memory usage with the minimum table definition cache:
-    command: mysqld --table-definition-cache=400
   phpbb:
     image: blueimp/phpbb:3.2
     ports:
