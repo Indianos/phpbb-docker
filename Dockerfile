@@ -11,19 +11,22 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libjpeg-dev \
     imagemagick \
     jq \
-    bzip2 \
-  # Install required PHP extensions:
-  && docker-php-ext-configure \
-    gd --with-jpeg-dir=/usr/include/ \
+    bzip2
+
+# Install required PHP extensions:
+RUN docker-php-ext-configure \
+    gd --with-jpeg \
   && docker-php-ext-install \
     gd \
-    mysqli \
-  # Uninstall obsolete packages:
-  && apt-get autoremove -y \
+    mysqli
+
+# Uninstall obsolete packages:
+RUN apt-get autoremove -y \
     libpng-dev \
-    libjpeg-dev \
-  # Remove obsolete files:
-  && apt-get clean \
+    libjpeg-dev
+
+# Remove obsolete files:
+RUN apt-get clean \
   && rm -rf \
     /tmp/* \
     /usr/share/doc/* \
