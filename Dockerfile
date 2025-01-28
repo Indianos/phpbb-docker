@@ -1,6 +1,8 @@
 # phpBB Dockerfile
 
-FROM php:8.2-apache
+FROM php:8-apache
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Do a dist-upgrade and install the required packages:
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -68,15 +70,5 @@ VOLUME \
   /var/www/html/files \
   /var/www/html/store \
   /var/www/html/images/avatars/upload
-
-ENV \
-  DBHOST=mysql \
-  DBPORT= \
-  DBNAME=phpbb \
-  DBUSER=phpbb \
-  DBPASSWD= \
-  TABLE_PREFIX=phpbb_ \
-  PHPBB_INSTALLED=true \
-  AUTO_DB_MIGRATE=false
 
 CMD ["phpbb-apache2"]
