@@ -13,10 +13,9 @@
 # Exit immediately if a command exits with a non-zero status:
 set -e
 
+composer init
 # Check which is the latest stable version
-#TODO: need to test and adjust with $BASE_VERSION set
-# LATEST_VERSION=$(composer show phpbb/phpbb ${BASE_VERSION:---latest} | grep 'latest' | awk '{print $2}')
-LATEST_VERSION=$(composer show phpbb/phpbb --latest | grep 'latest' | awk '{print $2}')
+LATEST_VERSION=$(composer show -la phpbb/phpbb | grep 'latest' | awk '{print $3}')
 
 # Define which directory to work with
 dir_to_check="/tmp/phpbb-$LATEST_VERSION"
@@ -26,7 +25,7 @@ if [ -d "$dir_to_check" ] && [ "$(find "$dir_to_check" -maxdepth 0 -type d -empt
     # dir exists and not empty
 else
     # dir does not exist - download files
-    composer install phpbb/phpbb $dir_to_check "$LATEST_VERSION"
+    composer create-project phpbb/phpbb $dir_to_check "$LATEST_VERSION"
 fi
 
 # Provide files to wanted directory
