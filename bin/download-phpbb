@@ -13,7 +13,7 @@
 # Exit immediately if a command exits with a non-zero status:
 set -e
 
-composer init --name 'tmp-repo' --descdescription 'tmp-repo' --author='Indianos'
+composer init --name 'tmp-repo' --description 'tmp-repo' --author='Indianos'
 # Check which is the latest stable version
 LATEST_VERSION=$(composer show -la phpbb/phpbb | grep 'latest' | awk '{print $3}')
 
