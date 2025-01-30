@@ -13,14 +13,21 @@
 # Exit immediately if a command exits with a non-zero status:
 set -e
 
-# URL to the official list of phpBB versions:
-VERSIONS_URL=https://version.phpbb.com/phpbb/versions.json
-# Base URL for the release downloads:
-RELEASE_BASE_URL=https://download.phpbb.com/pub/release/
+# Check which is the latest stable version
+#TODO: need to test and adjust with $BASE_VERSION set
+# LATEST_VERSION=$(composer show phpbb/phpbb ${BASE_VERSION:---latest} | grep 'latest' | awk '{print $2}')
+LATEST_VERSION=$(composer show phpbb/phpbb --latest | grep 'latest' | awk '{print $2}')
 
-# Retrieve the latest stable version:
-VERSION=$(curl -sL "$VERSIONS_URL" |
-  jq -r '.stable["'"${BASE_VERSION:-3.3}"'"].current')
+# Define which directory to work with
+dir_to_check="/tmp/phpbb-$LATEST_VERSION"
 
-# Download and extract the phpBB package into the given directory:
-curl -sL "$RELEASE_BASE_URL/${BASE_VERSION:-3.3}/$VERSION/phpBB-$VERSION.tar.bz2" | tar xj -C "${1:-$PWD}"
+# Check if an old download was not left
+if [ -d "$dir_to_check" ] && [ "$(find "$dir_to_check" -maxdepth 0 -type d -empty 2>/dev/null)" = "" ]; then
+    # dir exists and not empty
+else
+    # dir does not exist - download files
+    composer install phpbb/phpbb $dir_to_check "$LATEST_VERSION"
+fi
+
+# Provide files to wanted directory
+cp $dir_to_check ${1:-$PWD}

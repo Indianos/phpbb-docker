@@ -55,12 +55,12 @@ COPY php.ini /usr/local/etc/php/
 COPY bin /usr/local/bin
 
 # Install phpBB into the Apache document root:
-RUN download-phpbb /var/www \
+RUN download-phpbb /var/www/phpBB \
   && rm -rf \
-    /var/www/phpBB3/install \
-    /var/www/phpBB3/docs \
+    /var/www/phpBB/install \
+    /var/www/phpBB/docs \
     /var/www/html \
-  && mv /var/www/phpBB3 /var/www/html
+  && mv /var/www/phpBB /var/www/html
 
 # Add the phpBB config file:
 COPY config.php /var/www/html/

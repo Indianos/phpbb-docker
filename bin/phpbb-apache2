@@ -16,10 +16,10 @@ db_migrate() {
 }
 
 if [ "$PHPBB_INSTALLED" = false ]; then
-  download-phpbb /tmp
-  mv /tmp/phpBB3/install /var/www/html/
-  mv /tmp/phpBB3/docs /var/www/html/
-  rm -rf /tmp/phpBB3
+  download-phpbb /tmp/phpBB
+  mv /tmp/phpBB/install /var/www/html/
+  mv /tmp/phpBB/docs /var/www/html/
+  rm -rf /tmp/phpBB
   rm /var/www/html/config.php
   touch /var/www/html/config.php
   chown www-data /var/www/html/config.php
