@@ -3,6 +3,7 @@
 FROM php:8-apache
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Do a dist-upgrade and install the required packages:
 RUN export DEBIAN_FRONTEND=noninteractive \
