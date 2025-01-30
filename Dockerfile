@@ -23,7 +23,8 @@ RUN docker-php-ext-configure \
     gd --with-jpeg \
   && docker-php-ext-install \
     gd \
-    mysqli
+    mysqli \
+    zip
 
 # Uninstall obsolete packages:
 RUN apt-get autoremove -y \
