@@ -14,7 +14,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libjpeg-dev \
     imagemagick \
     jq \
-    bzip2
+    bzip2 \
+    zip
 
 # Install required PHP extensions:
 RUN docker-php-ext-configure \
