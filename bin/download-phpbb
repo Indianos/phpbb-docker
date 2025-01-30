@@ -21,10 +21,8 @@ LATEST_VERSION=$(composer show -la phpbb/phpbb | grep 'latest' | awk '{print $3}
 dir_to_check="/tmp/phpbb-$LATEST_VERSION"
 
 # Check if an old download was not left
-if [ -d "$dir_to_check" ] && [ "$(find "$dir_to_check" -maxdepth 0 -type d -empty 2>/dev/null)" = "" ]; then
-    # dir exists and not empty
-else
-    # dir does not exist - download files
+if [ ! -d "$dir_to_check" ] || [ "$(find "$dir_to_check" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
+    # dir does not exist or is empty - download files
     composer create-project phpbb/phpbb $dir_to_check "$LATEST_VERSION"
 fi
 
