@@ -4,7 +4,7 @@ services:
     # Debug access:
     #ports:
     #  - "3306:3306"
-    env:
+    environment:
       MARIADB_ROOT_PASSWORD
   phpbb:
     build: .
