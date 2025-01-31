@@ -14,8 +14,9 @@ services:
     ports:
       - 80:80
       - 443:443
-    volumes:
-      - ./ssl:/etc/apache2/ssl
+    # Uncomment these two lines below to enable ssl (see ./README.md)
+    #volumes:
+    #  - ./ssl:/etc/apache2/ssl
     env_file: .env
   #backup:
   #  image: blueimp/phpbb-s3-backup
