@@ -79,4 +79,7 @@ VOLUME \
   /var/www/html/store \
   /var/www/html/images/avatars/upload
 
+RUN chown -R www-data:www-data /var/www/html/files /var/www/html/store /var/www/html/images/avatars/upload
+RUN chmod -R 775 /var/www/html/files /var/www/html/store /var/www/html/images/avatars/upload
+
 CMD ["phpbb-apache2"]
