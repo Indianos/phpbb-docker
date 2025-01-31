@@ -31,4 +31,4 @@ fi
 
 
 echo 'Provide files to wanted directory '${1:-$PWD}
-cp $dir_to_check ${1:-$PWD}
+cp -r $dir_to_check ${1:-$PWD}
