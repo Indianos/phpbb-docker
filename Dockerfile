@@ -75,11 +75,21 @@ COPY config.php /var/www/html/
 
 # Expose the phpBB upload directories as volumes:
 VOLUME \
+  /var/www/html/cache \
   /var/www/html/files \
   /var/www/html/store \
   /var/www/html/images/avatars/upload
 
-RUN chown -R www-data:www-data /var/www/html/files /var/www/html/store /var/www/html/images/avatars/upload
-RUN chmod -R 775 /var/www/html/files /var/www/html/store /var/www/html/images/avatars/upload
+RUN chown -R www-data:www-data \
+  /var/www/html/cache \
+  /var/www/html/files \
+  /var/www/html/store \
+  /var/www/html/images/avatars/upload
+
+RUN chmod -R 775 \
+  /var/www/html/cache \
+  /var/www/html/files \
+  /var/www/html/store \
+  /var/www/html/images/avatars/upload
 
 CMD ["phpbb-apache2"]
