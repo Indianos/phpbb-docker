@@ -79,4 +79,4 @@ VOLUME \
   /var/www/html/store \
   /var/www/html/images/avatars/upload
 
-ENTRYPOINT ["phpbb-apache2"]
+CMD ["phpbb-apache2"]

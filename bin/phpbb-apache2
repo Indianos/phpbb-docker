@@ -1,9 +1,12 @@
 #!/bin/sh
 # shellcheck shell=dash
 
+echo "\n\nphpBB-apache\n"
+
 set -e
 
 db_migrate() {
+  echo 'Starting migration... '
   local store=/var/www/html/store
   # Wait 5 seconds for the db server to be available:
   sleep 5
@@ -13,9 +16,12 @@ db_migrate() {
     2>> "$store"/db_migrate_err_"$(date +%s)".log
   # Remove log files which are empty or older than 30 days:
   find "$store" -type f -name '*.log' \( -empty -o -mtime +30 \) -exec rm {} +
+  echo 'Done\n'
 }
 
+echo 'IF statement: '
 if [ "$PHPBB_INSTALLED" = false ]; then
+  echo 'not installed\n'
   download-phpbb /tmp/phpBB
   mv /tmp/phpBB/install /var/www/html/
   mv /tmp/phpBB/docs /var/www/html/
@@ -24,6 +30,7 @@ if [ "$PHPBB_INSTALLED" = false ]; then
   touch /var/www/html/config.php
   chown www-data /var/www/html/config.php
 elif [ "$AUTO_DB_MIGRATE" = true ]; then
+  echo 'migration\n'
   # Run db migration as background process:
   db_migrate &
 fi
@@ -33,4 +40,5 @@ if [ -d /etc/apache2/ssl ]; then
   set -- -DSSL "$@"
 fi
 
+echo Continue on apache2
 exec apache2-foreground "$@"
