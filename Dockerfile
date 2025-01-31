@@ -12,6 +12,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends --no-install-suggests -y \
     libpng-dev \
     libjpeg-dev \
+    libzip-dev \
     imagemagick \
     jq \
     bzip2 \
@@ -21,6 +22,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 # Install required PHP extensions:
 RUN docker-php-ext-configure \
     gd --with-jpeg \
+    zip \
   && docker-php-ext-install \
     gd \
     mysqli \
