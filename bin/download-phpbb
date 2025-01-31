@@ -10,21 +10,25 @@
 # Usage: ./get-phpbb.sh [dir]
 #
 
-# Exit immediately if a command exits with a non-zero status:
+echo "Exit immediately if a command exits with a non-zero status\n"
 set -e
 
+echo 'Init composer to see versions\n'
 composer init --name 'noone/tmp-repo' --description 'tmp-repo' --author='Indianos'
-# Check which is the latest stable version
+echo 'Check which is the latest stable version\n'
 LATEST_VERSION=$(composer show -la phpbb/phpbb | grep 'latest' | awk '{print $3}')
 
-# Define which directory to work with
+echo 'Define which directory to work with\n'
 dir_to_check="/tmp/phpbb-$LATEST_VERSION"
 
-# Check if an old download was not left
+echo 'Check if an old download was not left: '
 if [ ! -d "$dir_to_check" ] || [ "$(find "$dir_to_check" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
-    # dir does not exist or is empty - download files
+    echo 'dir does not exist or is empty - download files\n'
     composer create-project phpbb/phpbb $dir_to_check "$LATEST_VERSION"
+else 
+    echo 'there is something\n'
 fi
 
-# Provide files to wanted directory
+
+echo 'Provide files to wanted directory'
 cp $dir_to_check ${1:-$PWD}
