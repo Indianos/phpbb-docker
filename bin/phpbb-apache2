@@ -20,7 +20,7 @@ db_migrate() {
 }
 
 echo 'IF statement: '
-if [ "$PHPBB_INSTALLED" = false ]; then
+if [ "${PHPBB_INSTALLED,,}" = "false" ]; then
   echo 'not installed\n'
   download-phpbb /tmp/phpBB
   mv /tmp/phpBB/install /var/www/html/
