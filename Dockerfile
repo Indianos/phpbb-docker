@@ -7,9 +7,10 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Do a dist-upgrade and install the required packages:
 RUN export DEBIAN_FRONTEND=noninteractive \
-  && apt-get update \
-  && apt-get dist-upgrade -y \
-  && apt-get install --no-install-recommends --no-install-suggests -y \
+  && apt-get update -y \
+  && apt-get upgrade -y
+  && apt-get dist-upgrade -y
+RUN apt-get install --no-install-recommends --no-install-suggests -y \
     libpng-dev \
     libjpeg-dev \
     libzip-dev \
@@ -20,13 +21,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     p7zip p7zip-full
 
 # Install required PHP extensions:
-RUN docker-php-ext-configure \
-    gd --with-jpeg \
-    zip \
-  && docker-php-ext-install \
+RUN docker-php-ext-install \
     gd \
     mysqli \
     zip
+
+RUN docker-php-ext-configure \
+    gd --with-jpeg
 
 # Uninstall obsolete packages:
 RUN apt-get autoremove -y \
