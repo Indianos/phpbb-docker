@@ -24,7 +24,7 @@ dir_to_check="/tmp/phpbb-$LATEST_VERSION"
 echo 'Check if an old download was not left: '
 if [ ! -d "$dir_to_check" ] || [ "$(find "$dir_to_check" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
     echo 'dir does not exist or is empty - download files\n'
-    composer create-project phpbb/phpbb $dir_to_check "$LATEST_VERSION"
+    composer create-project --no-progress phpbb/phpbb $dir_to_check "$LATEST_VERSION"
 else 
     echo 'there is something\n'
 fi
