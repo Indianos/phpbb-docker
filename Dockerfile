@@ -8,8 +8,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 # Do a dist-upgrade and install the required packages:
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update -y \
-  && apt-get upgrade -y
+  && apt-get upgrade -y \
   && apt-get dist-upgrade -y
+
 RUN apt-get install --no-install-recommends --no-install-suggests -y \
     libpng-dev \
     libjpeg-dev \
