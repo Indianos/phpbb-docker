@@ -6,6 +6,9 @@ services:
     #  - "3306:3306"
     environment:
       - MARIADB_ROOT_PASSWORD
+      - MARIADB_USER: $DBUSER
+      - MARIADB_PASSWORD: $DBPASSWD
+      - MARIADB_DATABASE: $DBNAME
   phpbb:
     build: .
     ports:
