@@ -1,4 +1,3 @@
-version: '2.3'
 services:
   mysql:
     image: mariadb
@@ -6,26 +5,20 @@ services:
     #ports:
     #  - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD
+      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
+      MARIADB_USER: $DBUSER
+      MARIADB_PASSWORD: $DBPASSWD
+      MARIADB_DATABASE: $DBNAME
   phpbb:
-    build:
-      context: .
+    build: .
     ports:
       - 80:80
       - 443:443
-    environment:
-      - SERVER_NAME
-      - DBPASSWD
-      - PHPBB_INSTALLED
-      - AUTO_DB_MIGRATE
-    volumes:
-      - ./ssl:/etc/apache2/ssl
-  backup:
-    image: blueimp/phpbb-s3-backup
-    environment:
-      - DBPASSWD
-      - S3_BUCKET
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-    volumes_from:
-      - phpbb
+    # Uncomment these two lines below to enable ssl (see ./README.md)
+    #volumes:
+    #  - ./ssl:/etc/apache2/ssl
+    env_file: .env
+  #backup:
+  #  image: blueimp/phpbb-s3-backup
+  #  volumes_from:
+  #    - phpbb

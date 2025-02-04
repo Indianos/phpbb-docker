@@ -5,22 +5,24 @@
 # Downloads and extracts the latest stable phpBB version.
 # Extracts the downloaded package in the given or the current directory.
 #
-# Requires curl, jq and tar with bzip2 support.
-#
-# Usage: ./get-phpbb.sh [dir]
-#
 
-# Exit immediately if a command exits with a non-zero status:
+# Exit immediately if a command exits with a non-zero status
 set -e
 
-# URL to the official list of phpBB versions:
-VERSIONS_URL=https://version.phpbb.com/phpbb/versions.json
-# Base URL for the release downloads:
-RELEASE_BASE_URL=https://download.phpbb.com/pub/release/
+# Init composer to see versions
+composer init --name 'noone/tmp-repo' --description 'tmp-repo' --author='Indianos'
+# Check which is the latest stable version
+LATEST_VERSION=$(composer show -la phpbb/phpbb | grep 'latest' | awk '{print $3}')
 
-# Retrieve the latest stable version:
-VERSION=$(curl -sL "$VERSIONS_URL" |
-  jq -r '.stable["'"${BASE_VERSION:-3.3}"'"].current')
+# Define which directory to work with
+dir_to_check="/tmp/phpbb-$LATEST_VERSION"
 
-# Download and extract the phpBB package into the given directory:
-curl -sL "$RELEASE_BASE_URL/${BASE_VERSION:-3.3}/$VERSION/phpBB-$VERSION.tar.bz2" | tar xj -C "${1:-$PWD}"
+# Check if an old download was not left
+if [ ! -d "$dir_to_check" ] || [ "$(find "$dir_to_check" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
+    # Directory does not exist or is empty - download files
+    composer create-project --no-progress phpbb/phpbb $dir_to_check "$LATEST_VERSION"
+fi
+
+
+# Provide files to wanted directory
+cp -r $dir_to_check ${1:-$PWD}

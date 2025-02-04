@@ -1,24 +1,34 @@
 # phpBB Dockerfile
 
-FROM php:8.2-apache
+FROM php:8-apache
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Do a dist-upgrade and install the required packages:
 RUN export DEBIAN_FRONTEND=noninteractive \
-  && apt-get update \
-  && apt-get dist-upgrade -y \
-  && apt-get install --no-install-recommends --no-install-suggests -y \
+  && apt-get update -y \
+  && apt-get upgrade -y \
+  && apt-get dist-upgrade -y
+
+RUN apt-get install --no-install-recommends --no-install-suggests -y \
     libpng-dev \
     libjpeg-dev \
+    libzip-dev \
     imagemagick \
     jq \
-    bzip2
+    bzip2 \
+    zip unzip \
+    p7zip p7zip-full
 
 # Install required PHP extensions:
-RUN docker-php-ext-configure \
-    gd --with-jpeg \
-  && docker-php-ext-install \
+RUN docker-php-ext-install \
     gd \
-    mysqli
+    mysqli \
+    zip
+
+RUN docker-php-ext-configure \
+    gd --with-jpeg
 
 # Uninstall obsolete packages:
 RUN apt-get autoremove -y \
@@ -53,30 +63,33 @@ COPY php.ini /usr/local/etc/php/
 COPY bin /usr/local/bin
 
 # Install phpBB into the Apache document root:
-RUN download-phpbb /var/www \
+RUN download-phpbb /var/www/phpBB \
   && rm -rf \
-    /var/www/phpBB3/install \
-    /var/www/phpBB3/docs \
+    /var/www/phpBB/install \
+    /var/www/phpBB/docs \
     /var/www/html \
-  && mv /var/www/phpBB3 /var/www/html
+  && mv /var/www/phpBB /var/www/html
 
 # Add the phpBB config file:
 COPY config.php /var/www/html/
 
 # Expose the phpBB upload directories as volumes:
 VOLUME \
+  /var/www/html/cache \
   /var/www/html/files \
   /var/www/html/store \
   /var/www/html/images/avatars/upload
 
-ENV \
-  DBHOST=mysql \
-  DBPORT= \
-  DBNAME=phpbb \
-  DBUSER=phpbb \
-  DBPASSWD= \
-  TABLE_PREFIX=phpbb_ \
-  PHPBB_INSTALLED=true \
-  AUTO_DB_MIGRATE=false
+RUN chown -R www-data:www-data \
+  /var/www/html/cache \
+  /var/www/html/files \
+  /var/www/html/store \
+  /var/www/html/images/avatars/upload
+
+RUN chmod -R 775 \
+  /var/www/html/cache \
+  /var/www/html/files \
+  /var/www/html/store \
+  /var/www/html/images/avatars/upload
 
 CMD ["phpbb-apache2"]
